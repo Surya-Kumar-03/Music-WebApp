@@ -2,7 +2,7 @@ const Footer = () => {
 	return (
 		<>
 			<div className='flex justify-center items-center bg-slate-100 h-full'>
-				Create By
+				Created by
 				<a
 					href='https://www.linkedin.com/in/aryan-amish'
 					className='px-1 hover:underline font-semibold'
