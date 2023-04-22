@@ -40,7 +40,7 @@ const LoginForm = (props: { open: boolean; setOpen: Function }) => {
 		validationSchema: Yup.object({
 			id: Yup.string()
 				.email("Enter a valid email")
-				.required("Email Id is required"),
+				.required("Email is required"),
 			password: Yup.string()
 				.max(255, "Password is too")
 				.required("Password is required"),
@@ -105,14 +105,14 @@ const LoginForm = (props: { open: boolean; setOpen: Function }) => {
 								onSubmit={e => {
 									formik.handleSubmit(e);
 								}}
-								className='flex flex-col gap-4 mt-3'
+								className='flex flex-col gap-4 -mt-10'
 								autoComplete='off'
 							>
 								<TextField
 									error={!!(formik.touched.id && formik.errors.id)}
 									fullWidth
 									helperText={formik.touched.id && formik.errors.id}
-									label='Email Id'
+									label='Email'
 									name='id'
 									onBlur={formik.handleBlur}
 									onChange={formik.handleChange}
@@ -123,7 +123,7 @@ const LoginForm = (props: { open: boolean; setOpen: Function }) => {
 									error={!!(formik.touched.password && formik.errors.password)}
 									fullWidth
 									helperText={formik.touched.password && formik.errors.password}
-									label='Your Password'
+									label='Password'
 									name='password'
 									onBlur={formik.handleBlur}
 									onChange={formik.handleChange}
