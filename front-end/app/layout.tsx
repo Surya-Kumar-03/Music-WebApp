@@ -10,13 +10,11 @@ export const metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<html lang='en'>
-			<body>
-				<div className='flex flex-col h-screen w-screen'>
-					<div className='h-auto'>
-						<Navbar />
-					</div>
-					<div className='h-full'>{children}</div>
-					<div className='h-10'>
+			<body className='overflow-auto overflow-x-hidden'>
+				<Navbar />
+				<div className='flex items-center justify-center'>
+					<div className=''>
+						<div className=''>{children}</div>
 						<Footer />
 					</div>
 				</div>
