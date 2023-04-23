@@ -21,7 +21,9 @@ const ListOfgenre = ['Metal', 'Romance', 'Rock', 'Rap'];
 
 const CreateSong = () => {
 	const [genre, setgenre] = useState('');
-	const [songName, setName] = useState('');
+	const [songName, setSongName] = useState('');
+	const [albumName, setAlbumName] = useState('');
+	const [artistName, setArtistName] = useState('');
 	const [image, setImage] = useState('');
 	const [musicFile, setMusicFile] = useState<File>();
 	const [videoFile, setVideoFile] = useState<File>();
@@ -62,7 +64,10 @@ const CreateSong = () => {
 	const firebaseAuth = getAuth(app);
 	useEffect(() => {
 		firebaseAuth.onAuthStateChanged(async (userCredentials) => {
-			if (userCredentials && userCredentials.displayName === 'Neffex Official') {
+			if (
+				(userCredentials && userCredentials.displayName === 'Neffex Official') ||
+				(userCredentials && userCredentials.displayName === 'Aryan amish')
+			) {
 			} else {
 				window.location.href = '/';
 			}
@@ -86,9 +91,9 @@ const CreateSong = () => {
 											className="w-full"
 											label="Song Name"
 											variant="outlined"
-											value={name}
+											value={songName}
 											onChange={(event) => {
-												setName(event.target.value);
+												setSongName(event.target.value);
 											}}
 										/>
 									</FormControl>
@@ -100,6 +105,10 @@ const CreateSong = () => {
 											className="w-full"
 											label="Album Name"
 											variant="outlined"
+											value={albumName}
+											onChange={(e) => {
+												setAlbumName(e.target.value);
+											}}
 										/>
 									</FormControl>
 								</div>
@@ -113,6 +122,10 @@ const CreateSong = () => {
 											className="w-full"
 											label="Artist Name"
 											variant="outlined"
+											value={artistName}
+											onChange={(e) => {
+												setArtistName(e.target.value);
+											}}
 										/>
 									</FormControl>
 								</div>
@@ -197,12 +210,12 @@ const CreateSong = () => {
 						<Card
 							review={true}
 							data={{
-								name: name || 'Song Name',
+								name: songName || 'Song Name',
 								artist: '',
 								album: '',
 								thumbnail: image,
 								duration: 120,
-								date: new Date(),
+								date: '24/06/2023',
 								clicks: 120,
 								likes: 129,
 								genre: '',
