@@ -122,7 +122,7 @@ const Navbar = () => {
 								inputProps={{ "aria-label": "search" }}
 							/>
 						</Search>
-						<div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
+						<div className='absolute inset-y-0 right-0 w-40 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
 							{/* Profile dropdown */}
 							{Loader !== 200 ? (
 								<ApiLoader state={Loader}>
