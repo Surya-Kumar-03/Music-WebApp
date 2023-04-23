@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "compile": "next build && next start"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -19,8 +20,10 @@
     "@types/react": "18.0.37",
     "@types/react-dom": "18.0.11",
     "autoprefixer": "10.4.14",
+    "axios": "^1.3.6",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
+    "firebase": "^9.20.0",
     "formik": "^2.2.9",
     "next": "13.3.0",
     "postcss": "8.4.23",
