@@ -14,11 +14,11 @@ import Dialog from "@mui/material/Dialog";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
-import { app } from "../config/firebase.config";
+import { app } from "../../config/firebase.config";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import axios from "axios";
-import api from "../api";
+import api from "../../api";
 
 const Transition = React.forwardRef(function Transition(
 	props: TransitionProps & {

@@ -1,8 +1,5 @@
 "use client";
 import Card from "@/app/components/cards/card";
-import { app } from "../../config/firebase.config";
-import { getAuth } from "firebase/auth";
-import { useEffect } from "react";
 import {
 	Box,
 	Button,
@@ -14,6 +11,9 @@ import {
 	TextField,
 } from "@mui/material";
 import { useState } from "react";
+import { app } from "../../config/firebase.config";
+import { getAuth } from "firebase/auth";
+import { useEffect } from "react";
 
 // TODO Get the List of genre from backend or add all the list here itself
 const ListOfgenre = ["Metal", "Romance", "Rock", "Rap"];
@@ -30,16 +30,6 @@ const CreateSong = () => {
 	};
 	const handleVideoUpload = (event: any) => {
 		setVideoFile(event.target.files[0]);
-	};
-	const handleImageChange = (e: any) => {
-		const file = e.target.files[0];
-		if (file) {
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setImage(reader.result as string);
-			};
-			reader.readAsDataURL(file);
-		}
 	};
 	const handleImageChange = (e: any) => {
 		const file = e.target.files[0];
@@ -69,7 +59,6 @@ const CreateSong = () => {
 			}
 		});
 	}, []);
-
 	return (
 		<>
 			<div className='flex justify-center items-center flex-col gap-5'>
@@ -89,9 +78,9 @@ const CreateSong = () => {
 											className='w-full'
 											label='Song Name'
 											variant='outlined'
-											value={title}
+											value={name}
 											onChange={event => {
-												setTitle(event.target.value);
+												setName(event.target.value);
 											}}
 										/>
 									</FormControl>
@@ -121,20 +110,18 @@ const CreateSong = () => {
 								</div>
 								<div className='w-full'>
 									<FormControl fullWidth>
-										<InputLabel id='demo-simple-select-label'>
-											Genere
-										</InputLabel>
+										<InputLabel id='demo-simple-select-label'>genre</InputLabel>
 										<Select
 											required
 											labelId='demo-simple-select-label'
 											id='demo-simple-select'
-											value={genere}
-											label='Genere'
+											value={genre}
+											label='genre'
 											onChange={event => {
-												setGenere(event.target?.value as string);
+												setgenre(event.target?.value as string);
 											}}
 										>
-											{ListOfGenere.map((gen, index) => {
+											{ListOfgenre.map((gen, index) => {
 												return (
 													<MenuItem key={index} value={index}>
 														{gen}
@@ -163,6 +150,40 @@ const CreateSong = () => {
 									/>
 								</Button>
 							</div>
+							<div>
+								<Button
+									variant='outlined'
+									component='label'
+									className={" w-full max-w-xl"}
+									disabled={videoFile ? true : false}
+								>
+									{musicFile ? musicFile.name : "Upload Your Song Here*"}
+									<input
+										hidden
+										accept='audio/*'
+										multiple
+										type='file'
+										onChange={handleMusicUpload}
+									/>
+								</Button>
+							</div>
+							<div>
+								<Button
+									variant='outlined'
+									component='label'
+									className={" w-full max-w-xl"}
+									disabled={musicFile ? true : false}
+								>
+									{videoFile ? videoFile.name : "Upload Your Video Here*"}
+									<input
+										hidden
+										accept='video/*'
+										multiple
+										type='file'
+										onChange={handleVideoUpload}
+									/>
+								</Button>
+							</div>
 							<Button type='submit' variant='contained' className='bg-blue-500'>
 								Add Song
 							</Button>
@@ -170,11 +191,19 @@ const CreateSong = () => {
 					</div>
 					<div className='pr-10'>
 						<Card
+							review={true}
 							data={{
-								title: title || "Song Name",
-								poster: image,
+								name: name || "Song Name",
+								artist: "",
+								album: "",
+								thumbnail: image,
+								duration: 120,
+								date: new Date(),
+								clicks: 120,
+								likes: 129,
+								genre: "",
 								link: "#",
-								type: "",
+								type: "video",
 							}}
 						/>
 					</div>
