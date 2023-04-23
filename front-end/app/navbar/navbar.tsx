@@ -3,7 +3,6 @@ import { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
@@ -11,6 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import LoginForm from "./loginForm";
 import { app } from "../config/firebase.config";
 import { getAuth, signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -152,7 +152,19 @@ const Navbar = () => {
                           </Link>
                         )}
                       </Menu.Item>
-
+                      <Menu.Item>
+													{({ active }) => (
+														<Link
+															href='/admin/create'
+															className={classNames(
+																active ? "bg-gray-100" : "",
+																"block px-4 py-2 text-lg text-gray-700"
+															)}
+														>
+															Add Song
+														</Link>
+													)}
+												</Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
                           <button

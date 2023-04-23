@@ -9,13 +9,14 @@ import {
 import { useFormik } from "formik";
 import * as React from "react";
 import * as Yup from "yup";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../config/firebase.config";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -47,7 +48,6 @@ const LoginForm = (props: { open: boolean; setOpen: Function }) => {
         .max(255, "Password is too")
         .required("Password is required"),
     }),
-
     onSubmit: async (values: any, helpers: any) => {
       try {
         // api request
