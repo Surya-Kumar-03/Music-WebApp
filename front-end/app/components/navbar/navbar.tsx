@@ -11,7 +11,9 @@ import LoginForm from "./loginForm";
 import { app } from "../../config/firebase.config";
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import ApiLoader from "../../utils/apiLoader";
+import axios from "axios";
+import api from "../../api";
+import ApiLoader from "@/app/utils/apiLoader";
 import NavbarSkeleton from "./navbarSkeleton";
 
 function classNames(...classes: any) {
@@ -59,29 +61,39 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Navbar = () => {
 	const router = useRouter();
 	const firebaseAuth = getAuth(app);
-	const [Loader, setLoader] = useState(0);
-
-	const [loggedIn, setLoggedIn] = useState(false); // true if user is logged in
-	const [loginForm, setLoginForm] = useState(false);
-
 	function signOutL() {
 		signOut(firebaseAuth);
 		setLoggedIn(false);
 	}
+	const [Loader, setLoader] = useState(0);
 	React.useEffect(() => {
-		firebaseAuth.onAuthStateChanged(userCredentials => {
-			//   console.log(userCredentials);
+		firebaseAuth.onAuthStateChanged(async userCredentials => {
+			// console.log(userCredentials);
 			if (userCredentials) {
-				setLoader(200);
-				setLoginForm(false);
-				setLoggedIn(true);
+				const { uid, displayName, email } = userCredentials;
+				try {
+					const response = await api.post("/user/signin", {
+						uid,
+						username: displayName,
+						email,
+					});
+					const user = response.data;
+					console.log(user);
+					setLoggedIn(true);
+					setLoader(200);
+				} catch (error) {
+					console.error(error);
+					setLoader(200);
+				}
 			} else {
 				setLoader(200);
-				setLoginForm(false);
 				setLoggedIn(false);
 			}
 		});
 	}, []);
+
+	const [loggedIn, setLoggedIn] = useState(false); // true if user is logged in
+	const [loginForm, setLoginForm] = useState(false);
 
 	return (
 		<>
@@ -90,7 +102,7 @@ const Navbar = () => {
 			) : (
 				<></>
 			)}
-			<div className='z-10 border-b-2  border-gray-200 sticky top-0 backdrop-filter backdrop-blur-md bg-white bg-opacity-40'>
+			<div className='z-10 border-b-2 border-gray-200 sticky top-0 backdrop-filter backdrop-blur-md bg-white bg-opacity-40'>
 				<div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
 					<div className='relative flex h-16 items-center justify-between'>
 						<div className='flex w-full items-center'>
@@ -110,7 +122,7 @@ const Navbar = () => {
 								inputProps={{ "aria-label": "search" }}
 							/>
 						</Search>
-						<div className='absolute w-24 inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
+						<div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
 							{/* Profile dropdown */}
 							{Loader !== 200 ? (
 								<ApiLoader state={Loader}>
