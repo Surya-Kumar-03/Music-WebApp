@@ -11,6 +11,8 @@ import LoginForm from "./loginForm";
 import { app } from "../config/firebase.config";
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import api from '../api';
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -63,10 +65,22 @@ const Navbar = () => {
   }
 
   React.useEffect(() => {
-    firebaseAuth.onAuthStateChanged((userCredentials) => {
-    //   console.log(userCredentials);
+    firebaseAuth.onAuthStateChanged(async (userCredentials) => {
+      // console.log(userCredentials);
       if (userCredentials) {
-        setLoggedIn(true);
+        const { uid, displayName, email } = userCredentials;
+        try {
+          const response = await api.post("/user/signin", {
+            uid,
+            username: displayName,
+            email,
+          });
+          const user = response.data;
+          console.log(user);
+          setLoggedIn(true);
+        } catch (error) {
+          console.error(error);
+        }
       } else {
         setLoggedIn(false);
       }
@@ -87,10 +101,7 @@ const Navbar = () => {
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
             <div className="flex w-full items-center">
-              <Link
-                href="/home/upcoming"
-                className="flex flex-row items-center gap-3"
-              >
+              <Link href="/" className="flex flex-row items-center gap-3">
                 <img src="/logo.png" className="h-12 w-12"></img>
               </Link>
               <div className="hidden sm:ml-6 sm:flex justify-center flex-grow">
@@ -153,18 +164,18 @@ const Navbar = () => {
                         )}
                       </Menu.Item>
                       <Menu.Item>
-													{({ active }) => (
-														<Link
-															href='/admin/create'
-															className={classNames(
-																active ? "bg-gray-100" : "",
-																"block px-4 py-2 text-lg text-gray-700"
-															)}
-														>
-															Add Song
-														</Link>
-													)}
-												</Menu.Item>
+                        {({ active }) => (
+                          <Link
+                            href="/admin/create"
+                            className={classNames(
+                              active ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-lg text-gray-700"
+                            )}
+                          >
+                            Add Song
+                          </Link>
+                        )}
+                      </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
                           <button
