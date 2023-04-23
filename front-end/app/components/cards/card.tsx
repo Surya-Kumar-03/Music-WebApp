@@ -1,23 +1,31 @@
 "use client";
 import { useState } from "react";
-import { Music } from "../utils/datainterface";
+import { Music } from "../../utils/datainterface";
+import PlayButton from "../playButton";
+import Image from "next/image";
 
-const Card = (props: { data: Music }) => {
+const Card = (props: { review?: boolean; data: Music }) => {
 	const [cardHover, setCardHover] = useState(false);
 	const data = props.data;
 	return (
 		<>
 			<div
-				className='relative flex flex-col p-3 gap-3 shadow-lg w-60 cursor-pointer transition-colors hover:bg-slate-200 rounded-xl justify-center items-center'
+				className={
+					(!props.review ? "hover:bg-slate-200" : "") +
+					" " +
+					"relative flex flex-col p-3 gap-3 shadow-lg w-60 cursor-pointer transition-colors  rounded-xl justify-center items-center"
+				}
 				onMouseEnter={() => {
+					if (props.review) return;
 					setCardHover(true);
 				}}
 				onMouseLeave={() => {
+					if (props.review) return;
 					setCardHover(false);
 				}}
 			>
 				<div className='h-56 w-56 rounded-xl'>
-					{data.poster === "" || data.poster === undefined ? (
+					{data.thumbnail === "" || data.thumbnail === undefined ? (
 						<div className='border border-1 rounded-lg h-full w-full flex items-center p-1 animate animate-pulse'>
 							<svg
 								className='text-gray-300'
@@ -30,35 +38,26 @@ const Card = (props: { data: Music }) => {
 							</svg>
 						</div>
 					) : (
-						<img src={data.poster} className='w-full h-full rounded-xl' />
+						<Image
+							src={data.thumbnail}
+							height={224}
+							width={224}
+							alt={data.name}
+							className='w-full h-full rounded-xl'
+						/>
 					)}
 				</div>
 
 				<div
 					className={
 						(cardHover ? "opacity-1 bottom-12" : "opacity-0 bottom-6") +
-						" absolute flex transition-all justify-center items-center action-color shadow-lg w-10 h-10 rounded-full right-5"
+						" absolute transition-all right-5"
 					}
 				>
-					<div className=''>
-						<svg
-							xmlns='http://www.w3.org/2000/svg'
-							fill='none'
-							viewBox='0 0 24 24'
-							strokeWidth={1.5}
-							stroke='currentColor'
-							className='w-6 h-6'
-						>
-							<path
-								strokeLinecap='round'
-								strokeLinejoin='round'
-								d='M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z'
-							/>
-						</svg>
-					</div>
+					<PlayButton />
 				</div>
 				<div className='flex h-5 w-56 justify-start items-center relative'>
-					<span className='font-semibold'>{data.title}</span>
+					<span className='font-semibold'>{data.name}</span>
 				</div>
 			</div>
 		</>

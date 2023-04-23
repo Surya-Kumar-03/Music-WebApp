@@ -1,10 +1,10 @@
 "use client";
 import {
-  Button,
-  TextField,
-  Typography,
-  InputAdornment,
-  IconButton,
+	Button,
+	TextField,
+	Typography,
+	InputAdornment,
+	IconButton,
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as React from "react";
@@ -21,110 +21,110 @@ import axios from "axios";
 import api from "../api";
 
 const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement<any, any>;
-  },
-  ref: React.Ref<unknown>
+	props: TransitionProps & {
+		children: React.ReactElement<any, any>;
+	},
+	ref: React.Ref<unknown>
 ) {
-  return <Slide direction="up" ref={ref} {...props} />;
+	return <Slide direction='up' ref={ref} {...props} />;
 });
 
 const LoginForm = (props: { open: boolean; setOpen: Function }) => {
-  const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
-  const handlePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+	const router = useRouter();
+	const [showPassword, setShowPassword] = useState(false);
+	const handlePasswordVisibility = () => {
+		setShowPassword(!showPassword);
+	};
 
-  const formik = useFormik({
-    initialValues: {
-      id: "",
-      password: "",
-      submit: null,
-    },
-    validationSchema: Yup.object({
-      id: Yup.string()
-        .email("Enter a valid email")
-        .required("Email is required"),
-      password: Yup.string()
-        .max(255, "Password is too")
-        .required("Password is required"),
-    }),
-    onSubmit: async (values: any, helpers: any) => {
-      try {
-        // api request
-        if (typeof window !== "undefined") {
-          // redirect after successfull login
-          // router.push()
-        }
-      } catch (err: any) {
-        // failed login
-      }
-    },
-  });
+	const formik = useFormik({
+		initialValues: {
+			id: "",
+			password: "",
+			submit: null,
+		},
+		validationSchema: Yup.object({
+			id: Yup.string()
+				.email("Enter a valid email")
+				.required("Email is required"),
+			password: Yup.string()
+				.max(255, "Password is too")
+				.required("Password is required"),
+		}),
+		onSubmit: async (values: any, helpers: any) => {
+			try {
+				// api request
+				if (typeof window !== "undefined") {
+					// redirect after successfull login
+					// router.push()
+				}
+			} catch (err: any) {
+				// failed login
+			}
+		},
+	});
 
-  const firebaseAuth = getAuth(app);
-  const provider = new GoogleAuthProvider();
-  const LoginWithGoogle = async () => {
-    try {
-      const userCredentials = await signInWithPopup(firebaseAuth, provider);
-      if (userCredentials) {
-        const { uid, displayName, email } = userCredentials.user;
-        const response = await api.post("/user/signin", {
-          uid,
-          username: displayName,
-          email,
-        });
-        const user = response.data;
-        console.log(user);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+	const firebaseAuth = getAuth(app);
+	const provider = new GoogleAuthProvider();
+	const LoginWithGoogle = async () => {
+		try {
+			const userCredentials = await signInWithPopup(firebaseAuth, provider);
+			if (userCredentials) {
+				const { uid, displayName, email } = userCredentials.user;
+				const response = await api.post("/user/signin", {
+					uid,
+					username: displayName,
+					email,
+				});
+				const user = response.data;
+				console.log(user);
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
-  return (
-    <>
-      <Dialog
-        open={props.open}
-        TransitionComponent={Transition}
-        keepMounted
-        fullWidth={true}
-        maxWidth="sm"
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <div className="flex h-96">
-          <div className="w-2/3 h-full hidden sm:flex">
-            <img src="/login.png" className="h-full" alt="login" />
-          </div>
-          <div className="w-full h-full flex flex-col">
-            <div
-              className="cursor-pointer flex justify-end pr-2 pt-2"
-              onClick={() => {
-                props.setOpen(false);
-              }}
-            >
-              <svg
-                width="2rem"
-                height="2rem"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g id="Menu / Close_SM">
-                  <path
-                    id="Vector"
-                    d="M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16"
-                    stroke="#000000"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </g>
-              </svg>
-            </div>
-            <div className="flex flex-col gap-3 justify-center items-center flex-grow">
-              {/* <form
+	return (
+		<>
+			<Dialog
+				open={props.open}
+				TransitionComponent={Transition}
+				keepMounted
+				fullWidth={true}
+				maxWidth='sm'
+				aria-describedby='alert-dialog-slide-description'
+			>
+				<div className='flex h-96'>
+					<div className='w-2/3 h-full hidden sm:flex'>
+						<img src='/login.png' className='h-full' alt='login' />
+					</div>
+					<div className='w-full h-full flex flex-col'>
+						<div
+							className='cursor-pointer flex justify-end pr-2 pt-2'
+							onClick={() => {
+								props.setOpen(false);
+							}}
+						>
+							<svg
+								width='2rem'
+								height='2rem'
+								viewBox='0 0 24 24'
+								fill='none'
+								xmlns='http://www.w3.org/2000/svg'
+							>
+								<g id='Menu / Close_SM'>
+									<path
+										id='Vector'
+										d='M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16'
+										stroke='#000000'
+										stroke-width='2'
+										stroke-linecap='round'
+										stroke-linejoin='round'
+									/>
+								</g>
+							</svg>
+						</div>
+						<div className='flex flex-col gap-3 justify-center items-center flex-grow'>
+							{/* <form
                 noValidate
                 onSubmit={(e) => {
                   formik.handleSubmit(e);
@@ -220,26 +220,26 @@ const LoginForm = (props: { open: boolean; setOpen: Function }) => {
                 </Button>
               </form>
               <p>or</p> */}
-              <Button
-                size="small"
-                type="submit"
-                variant="outlined"
-                style={{
-                  textTransform: "none",
-                  fontSize: "1.3rem",
-                }}
-                color="primary"
-                className="font-roboto shadow-md -mt-10"
-                onClick={LoginWithGoogle}
-              >
-                Sign-in with Google
-              </Button>
-            </div>
-          </div>
-        </div>
-      </Dialog>
-    </>
-  );
+							<Button
+								size='small'
+								type='submit'
+								variant='outlined'
+								style={{
+									textTransform: "none",
+									fontSize: "1.3rem",
+								}}
+								color='primary'
+								className='font-roboto shadow-md -mt-10'
+								onClick={LoginWithGoogle}
+							>
+								Sign-in with Google
+							</Button>
+						</div>
+					</div>
+				</div>
+			</Dialog>
+		</>
+	);
 };
 
 export default LoginForm;
