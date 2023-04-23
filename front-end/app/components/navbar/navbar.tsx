@@ -66,12 +66,15 @@ const Navbar = () => {
 		setLoggedIn(false);
 	}
 	const [Loader, setLoader] = useState(0);
+	const [loggedIn, setLoggedIn] = useState(false); // true if user is logged in
+	const [loginForm, setLoginForm] = useState(false);
 	React.useEffect(() => {
 		firebaseAuth.onAuthStateChanged(async userCredentials => {
 			// console.log(userCredentials);
 			if (userCredentials) {
 				const { uid, displayName, email } = userCredentials;
 				try {
+					setLoader(0);
 					const response = await api.post("/user/signin", {
 						uid,
 						username: displayName,
@@ -81,19 +84,17 @@ const Navbar = () => {
 					console.log(user);
 					setLoggedIn(true);
 					setLoader(200);
+					setLoginForm(false);
 				} catch (error) {
 					console.error(error);
 					setLoader(200);
 				}
 			} else {
-				setLoader(200);
 				setLoggedIn(false);
+				setLoader(200);
 			}
 		});
 	}, []);
-
-	const [loggedIn, setLoggedIn] = useState(false); // true if user is logged in
-	const [loginForm, setLoginForm] = useState(false);
 
 	return (
 		<>
