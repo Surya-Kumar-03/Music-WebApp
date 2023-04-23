@@ -4,7 +4,7 @@ export interface Music{
     album: string,
     thumbnail: string,
     duration: number,
-    date:Date,
+    date: string,
     clicks: number,
     likes: number,
     genre: string,
