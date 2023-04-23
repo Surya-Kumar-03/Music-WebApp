@@ -17,6 +17,8 @@ import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../config/firebase.config";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import axios from "axios";
+import api from "../api";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -65,10 +67,17 @@ const LoginForm = (props: { open: boolean; setOpen: Function }) => {
   const provider = new GoogleAuthProvider();
   const LoginWithGoogle = async () => {
     try {
-      await signInWithPopup(firebaseAuth, provider).then((userCredentials) => {
-        console.log(userCredentials);
-        // location.reload();
-      });
+      const userCredentials = await signInWithPopup(firebaseAuth, provider);
+      if (userCredentials) {
+        const { uid, displayName, email } = userCredentials.user;
+        const response = await api.post("/user/signin", {
+          uid,
+          username: displayName,
+          email,
+        });
+        const user = response.data;
+        console.log(user);
+      }
     } catch (error) {
       console.log(error);
     }
