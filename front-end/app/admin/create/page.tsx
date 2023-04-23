@@ -1,5 +1,8 @@
 "use client";
 import Card from "@/app/components/cards/card";
+import { app } from "../../config/firebase.config";
+import { getAuth } from "firebase/auth";
+import { useEffect } from "react";
 import {
 	Box,
 	Button,
@@ -38,11 +41,34 @@ const CreateSong = () => {
 			reader.readAsDataURL(file);
 		}
 	};
+	const handleImageChange = (e: any) => {
+		const file = e.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setImage(reader.result as string);
+			};
+			reader.readAsDataURL(file);
+		}
+	};
 
 	const handleSubmit = async (event: any) => {
 		event.preventDefault();
 		// TODO make your API call here
 	};
+
+	const firebaseAuth = getAuth(app);
+	useEffect(() => {
+		firebaseAuth.onAuthStateChanged(async userCredentials => {
+			if (
+				userCredentials &&
+				userCredentials.displayName === "Neffex Official"
+			) {
+			} else {
+				window.location.href = "/";
+			}
+		});
+	}, []);
 
 	return (
 		<>
@@ -63,9 +89,9 @@ const CreateSong = () => {
 											className='w-full'
 											label='Song Name'
 											variant='outlined'
-											value={name}
+											value={title}
 											onChange={event => {
-												setName(event.target.value);
+												setTitle(event.target.value);
 											}}
 										/>
 									</FormControl>
@@ -95,18 +121,20 @@ const CreateSong = () => {
 								</div>
 								<div className='w-full'>
 									<FormControl fullWidth>
-										<InputLabel id='demo-simple-select-label'>genre</InputLabel>
+										<InputLabel id='demo-simple-select-label'>
+											Genere
+										</InputLabel>
 										<Select
 											required
 											labelId='demo-simple-select-label'
 											id='demo-simple-select'
-											value={genre}
-											label='genre'
+											value={genere}
+											label='Genere'
 											onChange={event => {
-												setgenre(event.target?.value as string);
+												setGenere(event.target?.value as string);
 											}}
 										>
-											{ListOfgenre.map((gen, index) => {
+											{ListOfGenere.map((gen, index) => {
 												return (
 													<MenuItem key={index} value={index}>
 														{gen}
@@ -135,40 +163,6 @@ const CreateSong = () => {
 									/>
 								</Button>
 							</div>
-							<div>
-								<Button
-									variant='outlined'
-									component='label'
-									className={" w-full max-w-xl"}
-									disabled={videoFile ? true : false}
-								>
-									{musicFile ? musicFile.name : "Upload Your Song Here*"}
-									<input
-										hidden
-										accept='audio/*'
-										multiple
-										type='file'
-										onChange={handleMusicUpload}
-									/>
-								</Button>
-							</div>
-							<div>
-								<Button
-									variant='outlined'
-									component='label'
-									className={" w-full max-w-xl"}
-									disabled={musicFile ? true : false}
-								>
-									{videoFile ? videoFile.name : "Upload Your Video Here*"}
-									<input
-										hidden
-										accept='video/*'
-										multiple
-										type='file'
-										onChange={handleVideoUpload}
-									/>
-								</Button>
-							</div>
 							<Button type='submit' variant='contained' className='bg-blue-500'>
 								Add Song
 							</Button>
@@ -176,19 +170,11 @@ const CreateSong = () => {
 					</div>
 					<div className='pr-10'>
 						<Card
-							review={true}
 							data={{
-								name: name || "Song Name",
-								artist: "",
-								album: "",
-								thumbnail: image,
-								duration: 120,
-								date: new Date(),
-								clicks: 120,
-								likes: 129,
-								genre: "",
+								title: title || "Song Name",
+								poster: image,
 								link: "#",
-								type: "video",
+								type: "",
 							}}
 						/>
 					</div>
