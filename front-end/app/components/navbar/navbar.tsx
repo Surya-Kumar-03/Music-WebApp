@@ -13,7 +13,7 @@ import {getAuth, signOut} from 'firebase/auth';
 import {useRouter} from 'next/navigation';
 import axios from 'axios';
 import api from '../../api';
-import ApiLoader from '@/app/utils/apiLoader';
+import ApiLoader from '../../utils/apiLoader';
 import NavbarSkeleton from './navbarSkeleton';
 
 function classNames(...classes: any) {
