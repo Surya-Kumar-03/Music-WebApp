@@ -1,24 +1,24 @@
-"use client";
+'use client';
 import {
 	Button,
 	TextField,
 	Typography,
 	InputAdornment,
 	IconButton,
-} from "@mui/material";
-import { useFormik } from "formik";
-import * as React from "react";
-import * as Yup from "yup";
-import { useState } from "react";
-import Dialog from "@mui/material/Dialog";
-import Slide from "@mui/material/Slide";
-import { TransitionProps } from "@mui/material/transitions";
-import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
-import { app } from "../../config/firebase.config";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import axios from "axios";
-import api from "../../api";
+} from '@mui/material';
+import {useFormik} from 'formik';
+import * as React from 'react';
+import * as Yup from 'yup';
+import {useState} from 'react';
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
+import {TransitionProps} from '@mui/material/transitions';
+import {GoogleAuthProvider, getAuth, signInWithPopup} from 'firebase/auth';
+import {app} from '../../config/firebase.config';
+import {useRouter} from 'next/navigation';
+import {useEffect} from 'react';
+import axios from 'axios';
+import api from '../../api';
 
 const Transition = React.forwardRef(function Transition(
 	props: TransitionProps & {
@@ -26,10 +26,10 @@ const Transition = React.forwardRef(function Transition(
 	},
 	ref: React.Ref<unknown>
 ) {
-	return <Slide direction='up' ref={ref} {...props} />;
+	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const LoginForm = (props: { open: boolean; setOpen: Function }) => {
+const LoginForm = (props: {open: boolean; setOpen: Function}) => {
 	const router = useRouter();
 	const [showPassword, setShowPassword] = useState(false);
 	const handlePasswordVisibility = () => {
@@ -38,22 +38,20 @@ const LoginForm = (props: { open: boolean; setOpen: Function }) => {
 
 	const formik = useFormik({
 		initialValues: {
-			id: "",
-			password: "",
+			id: '',
+			password: '',
 			submit: null,
 		},
 		validationSchema: Yup.object({
-			id: Yup.string()
-				.email("Enter a valid email")
-				.required("Email is required"),
+			id: Yup.string().email('Enter a valid email').required('Email is required'),
 			password: Yup.string()
-				.max(255, "Password is too")
-				.required("Password is required"),
+				.max(255, 'Password is too')
+				.required('Password is required'),
 		}),
 		onSubmit: async (values: any, helpers: any) => {
 			try {
 				// api request
-				if (typeof window !== "undefined") {
+				if (typeof window !== 'undefined') {
 					// redirect after successfull login
 					// router.push()
 				}
@@ -69,8 +67,8 @@ const LoginForm = (props: { open: boolean; setOpen: Function }) => {
 		try {
 			const userCredentials = await signInWithPopup(firebaseAuth, provider);
 			if (userCredentials) {
-				const { uid, displayName, email } = userCredentials.user;
-				const response = await api.post("/user/signin", {
+				const {uid, displayName, email} = userCredentials.user;
+				const response = await api.post('/user/signin', {
 					uid,
 					username: displayName,
 					email,
@@ -90,40 +88,37 @@ const LoginForm = (props: { open: boolean; setOpen: Function }) => {
 				TransitionComponent={Transition}
 				keepMounted
 				fullWidth={true}
-				maxWidth='sm'
-				aria-describedby='alert-dialog-slide-description'
-			>
-				<div className='flex h-96'>
-					<div className='w-2/3 h-full hidden sm:flex'>
-						<img src='/login.png' className='h-full' alt='login' />
+				maxWidth="sm"
+				aria-describedby="alert-dialog-slide-description">
+				<div className="flex h-96">
+					<div className="w-2/3 h-full hidden sm:flex">
+						<img src="/login.png" className="h-full" alt="login" />
 					</div>
-					<div className='w-full h-full flex flex-col'>
+					<div className="w-full h-full flex flex-col">
 						<div
-							className='cursor-pointer flex justify-end pr-2 pt-2'
+							className="cursor-pointer flex justify-end pr-2 pt-2"
 							onClick={() => {
 								props.setOpen(false);
-							}}
-						>
+							}}>
 							<svg
-								width='2rem'
-								height='2rem'
-								viewBox='0 0 24 24'
-								fill='none'
-								xmlns='http://www.w3.org/2000/svg'
-							>
-								<g id='Menu / Close_SM'>
+								width="2rem"
+								height="2rem"
+								viewBox="0 0 24 24"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg">
+								<g id="Menu / Close_SM">
 									<path
-										id='Vector'
-										d='M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16'
-										stroke='#000000'
-										stroke-width='2'
-										stroke-linecap='round'
-										stroke-linejoin='round'
+										id="Vector"
+										d="M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16"
+										stroke="#000000"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
 									/>
 								</g>
 							</svg>
 						</div>
-						<div className='flex flex-col gap-3 justify-center items-center flex-grow'>
+						<div className="flex flex-col gap-3 justify-center items-center flex-grow">
 							{/* <form
                 noValidate
                 onSubmit={(e) => {
@@ -221,17 +216,16 @@ const LoginForm = (props: { open: boolean; setOpen: Function }) => {
               </form>
               <p>or</p> */}
 							<Button
-								size='small'
-								type='submit'
-								variant='outlined'
+								size="small"
+								type="submit"
+								variant="outlined"
 								style={{
-									textTransform: "none",
-									fontSize: "1.3rem",
+									textTransform: 'none',
+									fontSize: '1.3rem',
 								}}
-								color='primary'
-								className='font-roboto shadow-md -mt-10'
-								onClick={LoginWithGoogle}
-							>
+								color="primary"
+								className="font-roboto shadow-md -mt-10"
+								onClick={LoginWithGoogle}>
 								Sign-in with Google
 							</Button>
 						</div>

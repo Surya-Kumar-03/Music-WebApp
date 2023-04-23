@@ -1,6 +1,6 @@
-import React from "react";
-import Image from "next/image";
-import { CircularProgress } from "@mui/material";
+import React from 'react';
+import Image from 'next/image';
+import {CircularProgress} from '@mui/material';
 
 export default function ApiLoader(props: {
 	state: number;
@@ -29,7 +29,7 @@ export default function ApiLoader(props: {
 	// 	}
 	// }, [props.state]);
 
-	const loading_screen: { [key: number | string]: JSX.Element } = {
+	const loading_screen: {[key: number | string]: JSX.Element} = {
 		0: (
 			<>
 				{/* Add your pulse loader here for different pages */}
@@ -37,24 +37,15 @@ export default function ApiLoader(props: {
 			</>
 		),
 		200: <></>,
-		600: <span className='text-2lg'>No Internet</span>,
+		600: <span className="text-2lg">No Internet</span>,
 		404: (
-			<div className='flex flex-col justify-center items-center w-96 h-[58vh]'>
-				<Image
-					src='/eventsNotFound.svg'
-					width={500}
-					height={500}
-					alt=''
-				></Image>
-				<p className='text-2xl font-light text-blue-400 mt-4'>
-					No events found!!
-				</p>
+			<div className="flex flex-col justify-center items-center w-96 h-[58vh]">
+				<Image src="/eventsNotFound.svg" width={500} height={500} alt=""></Image>
+				<p className="text-2xl font-light text-blue-400 mt-4">No events found!!</p>
 			</div>
 		),
 		401: <span>Unauthorised 401</span>,
-		default: (
-			<span className='text-2xl'>Something went Wrong {props.state}</span>
-		),
+		default: <span className="text-2xl">Something went Wrong {props.state}</span>,
 	};
 
 	return (
@@ -62,13 +53,12 @@ export default function ApiLoader(props: {
 			{props.state !== 200 && (
 				<div
 					className={
-						(props.className ? props.className : "") +
+						(props.className ? props.className : '') +
 						` bg-white z-20 flex justify-center items-center`
-					}
-				>
+					}>
 					{loading_screen.hasOwnProperty(props.state)
 						? loading_screen[props.state]
-						: loading_screen["default"]}
+						: loading_screen['default']}
 				</div>
 			)}
 		</>

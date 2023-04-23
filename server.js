@@ -1,19 +1,19 @@
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 app.use(express.json());
-const { default: mongoose } = require("mongoose");
+const {default: mongoose} = require('mongoose');
 
 app.use(cors());
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
+mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true});
 mongoose.connection
-	.once("open", () => {
-		console.log("DB Connected");
+	.once('open', () => {
+		console.log('DB Connected');
 	})
-	.on("error", error => console.log(error));
+	.on('error', (error) => console.log(error));
 
 const userSchema = new mongoose.Schema({
 	uid: {
@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
 	},
 });
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 const songSchema = new mongoose.Schema({
 	name: {
@@ -78,58 +78,49 @@ const songSchema = new mongoose.Schema({
 	},
 });
 
-app.post("/user/signin", async (req, res) => {
-	const { uid, username, email } = req.body;
+app.post('/user/signin', async (req, res) => {
+	const {uid, username, email} = req.body;
 	try {
-		let user = await User.findOne({ uid });
+		let user = await User.findOne({uid});
 		if (!user) {
-			user = await User.create({ uid, username, email });
+			user = await User.create({uid, username, email});
 		}
 		res.json(user);
 	} catch (err) {
-		res.status(400).json({ error: err.message });
+		res.status(400).json({error: err.message});
 	}
 });
 
-app.put("/users/:uid/likedSongs", async (req, res) => {
-	const { uid } = req.params;
-	const { songId } = req.body;
+app.put('/users/:uid/likedSongs', async (req, res) => {
+	const {uid} = req.params;
+	const {songId} = req.body;
 
 	try {
 		const user = await User.findOneAndUpdate(
-			{ uid },
-			{ $addToSet: { likedSongs: songId } },
-			{ new: true }
+			{uid},
+			{$addToSet: {likedSongs: songId}},
+			{new: true}
 		);
 		res.json(user);
 	} catch (err) {
-		res.status(400).json({ error: err.message });
+		res.status(400).json({error: err.message});
 	}
 });
 
-app.get("/", (req, res) => {
-	res.send("Hi, I am running!");
+app.get('/', (req, res) => {
+	res.send('Hi, I am running!');
 });
 
 app.listen(process.env.PORT || 8000, () => {
-	console.log("Server Up and Running!");
+	console.log('Server Up and Running!');
 });
 
-const Song = mongoose.model("Song", songSchema);
+const Song = mongoose.model('Song', songSchema);
 
-app.post("/upload/song", async (req, res) => {
+app.post('/upload/song', async (req, res) => {
 	try {
-		const {
-			name,
-			artist,
-			album,
-			thumbnail,
-			duration,
-			date,
-			clicks,
-			likes,
-			genre,
-		} = req.body;
+		const {name, artist, album, thumbnail, duration, date, clicks, likes, genre} =
+			req.body;
 
 		const song = new Song({
 			name,
@@ -148,51 +139,51 @@ app.post("/upload/song", async (req, res) => {
 		res.status(201).json(song);
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ message: "Internal Server Error" });
+		res.status(500).json({message: 'Internal Server Error'});
 	}
 });
 
-app.get("/songs/metal", async (req, res) => {
+app.get('/songs/metal', async (req, res) => {
 	try {
-		const songs = await Song.find({ genre: "metal" });
+		const songs = await Song.find({genre: 'metal'});
 		res.json(songs);
 	} catch (err) {
-		res.status(400).json({ error: err.message });
+		res.status(400).json({error: err.message});
 	}
 });
 
-app.get("/songs/electric", async (req, res) => {
+app.get('/songs/electric', async (req, res) => {
 	try {
-		const songs = await Song.find({ genre: "electric" });
+		const songs = await Song.find({genre: 'electric'});
 		res.json(songs);
 	} catch (err) {
-		res.status(400).json({ error: err.message });
+		res.status(400).json({error: err.message});
 	}
 });
 
-app.get("/songs/romantic", async (req, res) => {
+app.get('/songs/romantic', async (req, res) => {
 	try {
-		const songs = await Song.find({ genre: "romantic" });
+		const songs = await Song.find({genre: 'romantic'});
 		res.json(songs);
 	} catch (err) {
-		res.status(400).json({ error: err.message });
+		res.status(400).json({error: err.message});
 	}
 });
 
-app.get("/songs/rap", async (req, res) => {
+app.get('/songs/rap', async (req, res) => {
 	try {
-		const songs = await Song.find({ genre: "rap" });
+		const songs = await Song.find({genre: 'rap'});
 		res.json(songs);
 	} catch (err) {
-		res.status(400).json({ error: err.message });
+		res.status(400).json({error: err.message});
 	}
 });
 
-app.get("/allsongs", async (req, res) => {
+app.get('/allsongs', async (req, res) => {
 	try {
 		const songs = await Song.find();
 		const genres = {};
-		songs.forEach(song => {
+		songs.forEach((song) => {
 			if (genres[song.genre]) {
 				genres[song.genre].push({
 					title: song.title,
@@ -221,6 +212,6 @@ app.get("/allsongs", async (req, res) => {
 		res.json(response);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ error: "Internal Server Error" });
+		res.status(500).json({error: 'Internal Server Error'});
 	}
 });

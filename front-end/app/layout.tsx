@@ -1,20 +1,20 @@
-import Footer from "./components/footer/footer";
-import "./globals.css";
-import Navbar from "./components/navbar/navbar";
+import Footer from './components/footer/footer';
+import './globals.css';
+import Navbar from './components/navbar/navbar';
 
 export const metadata = {
-	title: "Music Web App",
-	description: "",
+	title: 'Music Web App',
+	description: '',
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = ({children}: {children: React.ReactNode}) => {
 	return (
-		<html lang='en'>
-			<body className='overflow-auto overflow-x-hidden'>
+		<html lang="en">
+			<body className="overflow-auto overflow-x-hidden">
 				<Navbar />
-				<div className='flex items-center justify-center'>
-					<div className=''>
-						<div className=''>{children}</div>
+				<div className="flex items-center justify-center">
+					<div className="">
+						<div className="">{children}</div>
 						<Footer />
 					</div>
 				</div>

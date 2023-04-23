@@ -2,11 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-
-.action-color{
-    @apply bg-blue-500 hover:bg-blue-600;
+.action-color {
+	@apply bg-blue-500 hover:bg-blue-600;
 }
 
-.skeleton-bg-color{
-    @apply bg-slate-200;
+.skeleton-bg-color {
+	@apply bg-slate-200;
 }
