@@ -1,6 +1,6 @@
-import Footer from "./footer/footer";
+import Footer from "./components/footer/footer";
 import "./globals.css";
-import Navbar from "./navbar/navbar";
+import Navbar from "./components/navbar/navbar";
 
 export const metadata = {
 	title: "Music Web App",

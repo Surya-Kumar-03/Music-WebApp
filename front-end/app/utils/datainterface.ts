@@ -1,11 +1,19 @@
 export interface Music{
-    title: string,
-    poster: string,
+    name: string,
+    artist: string,
+    album: string,
+    thumbnail: string,
+    duration: number,
+    date:Date,
+    clicks: number,
+    likes: number,
+    genre: string,
     link: string,
-    type:string,
+    type: 'video' | 'audio'
+
 }
 
-export interface GenereMusic{
-    genere: string,
+export interface genreMusic{
+    genre: string,
     music: Music[],
 }

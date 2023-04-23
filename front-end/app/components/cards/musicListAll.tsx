@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Music } from "../utils/datainterface";
+import { Music } from "../../utils/datainterface";
 import Card from "./card";
 
 const MusicListAll = (props: { title: string; musics: Music[] }) => {
