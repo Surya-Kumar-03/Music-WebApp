@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import {Music} from '../../utils/datainterface';
+import {InterfaceMusic} from '../../utils/datainterface';
 import Card from './card';
 
-const MusicListAll = (props: {title: string; musics: Music[]}) => {
+const MusicListAll = (props: {title: string; musics: InterfaceMusic[]}) => {
 	return (
 		<>
 			<div className="px-10 pt-10 flex flex-col gap-2">
@@ -10,8 +10,8 @@ const MusicListAll = (props: {title: string; musics: Music[]}) => {
 					<span className=" font-semibold text-2xl">{props.title}</span>
 				</div>
 				<div className="flex flex-wrap justify-center  gap-2">
-					{props.musics.map((music) => {
-						return <Card key={music.link} data={music} />;
+					{props.musics.map((music, index) => {
+						return <Card key={music.link + index} data={music} />;
 					})}
 				</div>
 			</div>

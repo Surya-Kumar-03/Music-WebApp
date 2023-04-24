@@ -1,14 +1,14 @@
 'use client';
 import Image from 'next/image';
 import {Inter} from 'next/font/google';
-import {genreMusic} from '../../utils/datainterface';
+import {InterfacegenreMusic} from '../../utils/datainterface';
 import MusicListAll from '@/app/components/cards/musicListAll';
 import {useState} from 'react';
 import {useEffect} from 'react';
 
 const inter = Inter({subsets: ['latin']});
 
-const DummyMusic: genreMusic[] = [
+const DummyMusic: InterfacegenreMusic[] = [
 	{
 		genre: 'Metal',
 		music: [
@@ -22,7 +22,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -35,7 +35,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -48,7 +48,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -61,7 +61,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -74,7 +74,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -87,7 +87,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -100,7 +100,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -113,7 +113,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -126,7 +126,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -139,7 +139,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -152,7 +152,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -165,7 +165,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 		],
@@ -182,7 +182,7 @@ const Home = (props: {params: {type: string}}) => {
 	return (
 		<>
 			<div>
-				{DummyMusic.map((genre: genreMusic) => {
+				{DummyMusic.map((genre: InterfacegenreMusic, index) => {
 					return (
 						<MusicListAll
 							key={genre.genre}
