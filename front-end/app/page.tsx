@@ -1,16 +1,16 @@
 import Image from 'next/image';
 import {Inter} from 'next/font/google';
-import {genreMusic} from './utils/datainterface';
+import {InterfacegenreMusic} from './utils/datainterface';
 import MusicListSmall from './components/cards/musicListSmall';
 import PlayAudio from './components/playback/audio';
 const inter = Inter({subsets: ['latin']});
 
-const DummyMusic: genreMusic[] = [
+const DummyMusic: InterfacegenreMusic[] = [
 	{
 		genre: 'Metal',
 		music: [
 			{
-				name: 'Peacefull Piano',
+				name: 'Peacefull PianoPeacefull PianoPeacefull PianoPeacefull PianoPeacefull PianoPeacefull PianoPeacefull PianoPeacefull PianoPeacefull PianoPeacefull Piano',
 				artist: '',
 				album: '',
 				thumbnail: '/poster.jpeg',
@@ -19,7 +19,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_asudio.mp3',
 				type: 'video',
 			},
 			{
@@ -32,7 +32,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -45,7 +45,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -58,7 +58,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 		],
@@ -76,7 +76,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -89,7 +89,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -102,7 +102,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -115,7 +115,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 		],
@@ -133,7 +133,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -146,7 +146,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -159,7 +159,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -172,7 +172,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 		],
@@ -190,7 +190,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -203,7 +203,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -216,7 +216,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 			{
@@ -229,7 +229,7 @@ const DummyMusic: genreMusic[] = [
 				clicks: 120,
 				likes: 129,
 				genre: '',
-				link: '#',
+				link: '/sample_audio.mp3',
 				type: 'video',
 			},
 		],
@@ -243,18 +243,21 @@ const Home = () => {
 		<>
 			<div className="">
 				<div className="pb-20">
-					{DummyMusic.map((genre: genreMusic) => {
+					{DummyMusic.map((genre: InterfacegenreMusic, index: number) => {
 						return (
-							<MusicListSmall
-								key={genre.genre}
-								title={genre.genre}
-								musics={genre.music}
-							/>
+							<>
+								{genre.music.length > 0 ? (
+									<MusicListSmall
+										key={genre.music[0].name + index + genre.genre}
+										title={genre.genre}
+										musics={genre.music}
+									/>
+								) : (
+									<></>
+								)}
+							</>
 						);
 					})}
-				</div>
-				<div className="sticky bottom-0 flex justify-center items-center">
-					<PlayAudio />
 				</div>
 			</div>
 		</>
