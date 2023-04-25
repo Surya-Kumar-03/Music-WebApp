@@ -19,8 +19,8 @@ const RootLayout = ({children}: {children: React.ReactNode}) => {
 				<Navbar />
 				<Providers>
 					<>
-						<PlayVideo />
-						{/* <div className="flex items-center justify-center">
+						{/* <PlayVideo /> */}
+						<div className="flex items-center justify-center">
 							<div className="container">
 								<div className="">{children}</div>
 								<div className="sticky bottom-0 flex justify-center items-center">
@@ -28,7 +28,7 @@ const RootLayout = ({children}: {children: React.ReactNode}) => {
 								</div>
 								<Footer />
 							</div>
-						</div> */}
+						</div>
 					</>
 				</Providers>
 			</body>
