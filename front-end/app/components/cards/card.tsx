@@ -1,12 +1,48 @@
 'use client';
 import {useState} from 'react';
-import {Music} from '../../utils/datainterface';
-import PlayButton from '../playButton';
+import {InterfaceMusic} from '../../utils/datainterface';
+import PlayPauseButton from '../playButton';
 import Image from 'next/image';
+import Skeleton from './skeleton';
+import {useDispatch, useSelector} from 'react-redux';
+import AudioPlayer from '@/app/redux/features/audioPlayer';
+import MusicPlayingAnimation from '../musicPlayingAnimation';
+import {RootState} from '@/app/redux/store';
 
-const Card = (props: {review?: boolean; data: Music}) => {
+const Card = (props: {review?: boolean; data: InterfaceMusic}) => {
+	const reduxAudioPlayer: any = useSelector((state: RootState) => state.AudioPlayer);
+	const dispatch = useDispatch();
 	const [cardHover, setCardHover] = useState(false);
+	const [loadingImage, setLoadingImage] = useState(true);
 	const data = props.data;
+
+	const PlayMusic = (event: any) => {
+		if (reduxAudioPlayer.link !== data.link) {
+			dispatch(AudioPlayer.link(data.link));
+			dispatch(AudioPlayer.show());
+			dispatch(AudioPlayer.play());
+			dispatch(AudioPlayer.played(0));
+			dispatch(AudioPlayer.duration(1));
+			dispatch(AudioPlayer.song_name(data.name));
+			dispatch(AudioPlayer.artist(data.artist));
+			return true;
+		}
+		return false;
+	};
+
+	const toggleMusic = (event: any) => {
+		if (reduxAudioPlayer.link !== data.link) {
+			PlayMusic(event);
+		} else {
+			if (reduxAudioPlayer.playing) {
+				dispatch(AudioPlayer.pause());
+			} else {
+				dispatch(AudioPlayer.play());
+			}
+		}
+		event.stopPropagation();
+	};
+
 	return (
 		<>
 			<div
@@ -15,6 +51,7 @@ const Card = (props: {review?: boolean; data: Music}) => {
 					' ' +
 					'relative flex flex-col p-3 gap-3 shadow-lg w-60 cursor-pointer transition-colors  rounded-xl justify-center items-center'
 				}
+				onClick={PlayMusic}
 				onMouseEnter={() => {
 					if (props.review) return;
 					setCardHover(true);
@@ -24,37 +61,43 @@ const Card = (props: {review?: boolean; data: Music}) => {
 					setCardHover(false);
 				}}>
 				<div className="h-56 w-56 rounded-xl">
-					{data.thumbnail === '' || data.thumbnail === undefined ? (
-						<div className="border border-1 rounded-lg h-full w-full flex items-center p-1 animate animate-pulse">
-							<svg
-								className="text-gray-300"
-								xmlns="http://www.w3.org/2000/svg"
-								aria-hidden="true"
-								fill="currentColor"
-								viewBox="0 0 640 512">
-								<path d="M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z" />
-							</svg>
-						</div>
+					{data.thumbnail === '' || data.thumbnail === undefined || loadingImage ? (
+						<Skeleton.Image />
 					) : (
+						<></>
+					)}
+					<div className={loadingImage === true ? 'opacity-0' : 'opacity 1'}>
 						<Image
 							src={data.thumbnail}
 							height={224}
 							width={224}
 							alt={data.name}
 							className="w-full h-full rounded-xl"
+							onLoad={() => {
+								setLoadingImage(false);
+							}}
 						/>
-					)}
+					</div>
 				</div>
-
 				<div
 					className={
 						(cardHover ? 'opacity-1 bottom-12' : 'opacity-0 bottom-6') +
 						' absolute transition-all right-5'
-					}>
-					<PlayButton />
+					}
+					onClick={toggleMusic}>
+					<PlayPauseButton
+						play={reduxAudioPlayer.link === data.link && reduxAudioPlayer.playing}
+					/>
 				</div>
-				<div className="flex h-5 w-56 justify-start items-center relative">
-					<span className="font-semibold">{data.name}</span>
+				<div className="flex h-5 w-56 justify-between items-center relative">
+					<div className="truncate w-[80%]">
+						<span className="font-semibold">{data.name}</span>
+					</div>
+					{reduxAudioPlayer.link === data.link ? (
+						<MusicPlayingAnimation playing={reduxAudioPlayer.playing} />
+					) : (
+						<></>
+					)}
 				</div>
 			</div>
 		</>

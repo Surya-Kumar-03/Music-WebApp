@@ -1,4 +1,4 @@
-export interface Music {
+export interface InterfaceMusic {
 	name: string;
 	artist: string;
 	album: string;
@@ -12,7 +12,15 @@ export interface Music {
 	type: 'video' | 'audio';
 }
 
-export interface genreMusic {
+export interface InterfacegenreMusic {
 	genre: string;
-	music: Music[];
+	music: InterfaceMusic[];
+}
+
+
+export interface InterfacePlayer {
+	muted:boolean;
+	seeking:boolean;
+	loop:boolean,
+	volume: number,
 }
