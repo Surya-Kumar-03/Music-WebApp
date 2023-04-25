@@ -19,7 +19,6 @@ const userSchema = new mongoose.Schema({
 	uid: {
 		type: String,
 		required: true,
-		unique: true,
 	},
 	username: {
 		type: String,
@@ -28,7 +27,6 @@ const userSchema = new mongoose.Schema({
 	email: {
 		type: String,
 		required: true,
-		unique: true,
 	},
 	likedSongs: {
 		type: [String],
@@ -39,42 +37,39 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 const songSchema = new mongoose.Schema({
+	id : {
+		type: Number,
+	},
 	name: {
 		type: String,
-		required: true,
 	},
 	artist: {
 		type: String,
-		required: true,
+	},
+	mediaUrl: {
+		type: String,
 	},
 	album: {
 		type: String,
-		required: true,
 	},
 	thumbnail: {
 		type: String,
-		required: true,
 	},
 	duration: {
 		type: Number,
-		required: true,
 	},
 	date: {
 		type: Date,
-		required: true,
 		default: Date.now,
 	},
 	clicks: {
 		type: Number,
-		default: 0,
 	},
 	likes: {
 		type: Number,
-		default: 0,
 	},
 	genre: {
 		type: String,
-		required: true,
 	},
 });
 
@@ -119,12 +114,26 @@ const Song = mongoose.model('Song', songSchema);
 
 app.post('/upload/song', async (req, res) => {
 	try {
-		const {name, artist, album, thumbnail, duration, date, clicks, likes, genre} =
-			req.body;
-
-		const song = new Song({
+		const {
 			name,
 			artist,
+			mediaUrl,
+			album,
+			thumbnail,
+			duration,
+			date,
+			clicks,
+			likes,
+			genre,
+		} = req.body;
+
+		const count = await Song.countDocuments();
+
+		const song = new Song({
+			id: count + 1,
+			name,
+			artist,
+			mediaUrl,
 			album,
 			thumbnail,
 			duration,

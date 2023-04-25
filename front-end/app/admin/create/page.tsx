@@ -12,10 +12,18 @@ import {
 	TextField,
 } from '@mui/material';
 import {useState} from 'react';
-import {app} from '../../config/firebase.config';
+import {app, storage} from '../../config/firebase.config';
 import {getAuth} from 'firebase/auth';
 import {useEffect} from 'react';
-
+import {
+	getStorage,
+	ref,
+	getDownloadURL,
+	uploadBytesResumable,
+	deleteObject,
+	getMetadata,
+} from 'firebase/storage';
+import axios from 'axios';
 // TODO Get the List of genre from backend or add all the list here itself
 const ListOfgenre = ['Metal', 'Romance', 'Rock', 'Rap'];
 
@@ -25,40 +33,171 @@ const CreateSong = () => {
 	const [albumName, setAlbumName] = useState('');
 	const [artistName, setArtistName] = useState('');
 	const [image, setImage] = useState('');
-	const [musicFile, setMusicFile] = useState<File>();
-	const [videoFile, setVideoFile] = useState<File>();
 
-	const handleMusicUpload = (event: any) => {
-		setMusicFile(event.target.files[0]);
-	};
-	const handleVideoUpload = (event: any) => {
-		setVideoFile(event.target.files[0]);
-	};
-	const handleImageChange = (e: any) => {
-		const file = e.target.files[0];
-		if (file) {
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setImage(reader.result as string);
+	const getMediaDuration = (mediaUrl: string, mediaType: string) => {
+		return new Promise((resolve, reject) => {
+			const media =
+				mediaType === 'audio' ? new Audio() : document.createElement('video');
+			media.src = mediaUrl;
+			media.onloadedmetadata = () => {
+				resolve(media.duration);
 			};
-			reader.readAsDataURL(file);
-		}
+			media.onerror = (error) => {
+				reject(error);
+			};
+		});
+	};
+
+	const [AudioDisplay, setAudioDisplay] = useState('Upload Your Song Here*');
+	const [AudioUrl, setAudioUrl] = useState('');
+
+	const uploadAudio = (e: any) => {
+		setImageUploading(true);
+		setAudioDisplay('Uploading, Please wait!');
+		const uploadFile = e.target.files[0];
+		const storageRef = ref(storage, `/audios/${Date.now()}-${uploadFile.name}`);
+		const uploadTask = uploadBytesResumable(storageRef, uploadFile);
+		uploadTask.on(
+			'state_changed',
+			() => {
+				// This function is optional and can be used to track progress of the upload
+			},
+			(error) => {
+				console.error(error);
+				setImageUploading(false);
+				setAudioDisplay('Try Again, Please!');
+			},
+			() => {
+				getDownloadURL(uploadTask.snapshot.ref)
+					.then((url) => {
+						setAudioUrl(url);
+						setImageUploading(false);
+						setAudioDisplay('Song Upload Successful!');
+						const audioDur = getMediaDuration(AudioUrl, 'audio');
+					})
+					.catch((error) => {
+						console.error(error);
+						setImageUploading(false);
+					});
+			}
+		);
+	};
+
+	const [VideoDisplay, setVideoDisplay] = useState('Upload Your Video Here*');
+	const [VideoUrl, setVideoUrl] = useState('');
+
+	const uploadVideo = (e: any) => {
+		setImageUploading(true);
+		setVideoDisplay('Uploading, Please wait!');
+		const uploadFile = e.target.files[0];
+		const storageRef = ref(storage, `/videos/${Date.now()}-${uploadFile.name}`);
+		console.log(uploadFile);
+		const uploadTask = uploadBytesResumable(storageRef, uploadFile);
+		uploadTask.on(
+			'state_changed',
+			() => {
+				// This function is optional and can be used to track progress of the upload
+			},
+			(error) => {
+				console.error(error);
+				setImageUploading(false);
+				setVideoDisplay('Try Again, Please!');
+			},
+			async () => {
+				getDownloadURL(uploadTask.snapshot.ref)
+					.then((url) => {
+						setVideoUrl(url);
+						setImageUploading(false);
+						setVideoDisplay('Video Upload Successful!');
+					})
+					.catch((error) => {
+						console.error(error);
+						setImageUploading(false);
+					});
+			}
+		);
+	};
+
+	const [imageDisplay, setImageDisplay] = useState('Upload your Song Poster Here*');
+	const [imageUploading, setImageUploading] = useState(false);
+	const [imageUrl, setImageUrl] = useState(
+		'https://yt3.googleusercontent.com/vCqmJ7cdUYpvR0bqLpWIe8ktaor4QafQLlfQyTuZy-M9W_YafT8Wo9kdsKL2St1BrkMRpVSJgA=s900-c-k-c0x00ffffff-no-rj'
+	);
+
+	const uploadImage = (e: any) => {
+		setImageUploading(true);
+		setImageDisplay('Uploading, Please wait!');
+		const uploadPoster = e.target.files[0];
+		const storageRef = ref(storage, `/images/${Date.now()}-${uploadPoster.name}`);
+		const uploadTask = uploadBytesResumable(storageRef, uploadPoster);
+		uploadTask.on(
+			'state_changed',
+			() => {
+				// This function is optional and can be used to track progress of the upload
+			},
+			(error) => {
+				console.error(error);
+				setImageUploading(false);
+				setImageDisplay('Try Again, Please!');
+			},
+			() => {
+				getDownloadURL(uploadTask.snapshot.ref)
+					.then((url) => {
+						setImageUrl(url);
+						setImageUploading(false);
+						setImageDisplay('Song Poster Upload Successful!');
+					})
+					.catch((error) => {
+						console.error(error);
+						setImageUploading(false);
+					});
+			}
+		);
 	};
 
 	const handleSubmit = async (event: any) => {
 		event.preventDefault();
 		// TODO make your API call here
-		const formData = {};
-		try {
-			const response = await api.post('/upload/song', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
-			});
-			console.log(response.data);
-		} catch (err) {
-			console.error(err);
-		}
+		// 	const formData = {
+		// 		name: songName,
+		// 		artist: artistName,
+		// 		album: albumName,
+		// 		thumbnail: imageUrl,
+		// 		duration: 0,
+		// 		date: Date.now(),
+		// 		clicks: 0,
+		// 		likes: 0,
+		// 		genre: genre
+		// 	};
+		// 	try {
+		// 		const response = await api.post('/upload/song', {songName, artistName, albumName, imageUrl,duration:0,date: Date.now(), clicks:0, likes:0, genre}, {
+		// 			headers: {
+		// 				'Content-Type': 'multipart/form-data',
+		// 			},
+		// 		});
+		// 		console.log(response.data);
+		// 	} catch (err) {
+		// 		console.error(err);
+		// 	}
+
+		const songData = {
+			name: songName,
+			artist: artistName,
+			mediaUrl: AudioUrl !== '' ? AudioUrl : VideoUrl,
+			album: albumName,
+			thumbnail: imageUrl,
+			duration: 0,
+			date: new Date(),
+			clicks: 0,
+			likes: 0,
+			genre: ListOfgenre[parseInt(genre)],
+		};
+		console.log(songData);
+
+		api
+			.post('/upload/song', songData)
+			.then((response) => console.log(response.data))
+			.catch((error) => console.error(error));
 	};
 
 	const firebaseAuth = getAuth(app);
@@ -157,15 +296,14 @@ const CreateSong = () => {
 									variant="outlined"
 									component="label"
 									className={' w-full max-w-xl'}>
-									Upload your Song Poster Here*
+									{imageDisplay}
 									<input
 										hidden
 										accept="image/*"
 										multiple
 										type="file"
-										onChange={(e) => {
-											handleImageChange(e);
-										}}
+										name="upload-file"
+										onChange={uploadImage}
 									/>
 								</Button>
 							</div>
@@ -174,14 +312,14 @@ const CreateSong = () => {
 									variant="outlined"
 									component="label"
 									className={' w-full max-w-xl'}
-									disabled={videoFile ? true : false}>
-									{musicFile ? musicFile.name : 'Upload Your Song Here*'}
+									disabled={VideoUrl !== ''}>
+									{AudioDisplay}
 									<input
 										hidden
 										accept="audio/*"
 										multiple
 										type="file"
-										onChange={handleMusicUpload}
+										onChange={uploadAudio}
 									/>
 								</Button>
 							</div>
@@ -190,18 +328,23 @@ const CreateSong = () => {
 									variant="outlined"
 									component="label"
 									className={' w-full max-w-xl'}
-									disabled={musicFile ? true : false}>
-									{videoFile ? videoFile.name : 'Upload Your Video Here*'}
+									disabled={AudioUrl !== ''}>
+									{VideoDisplay}
 									<input
 										hidden
 										accept="video/*"
 										multiple
+										id="video"
 										type="file"
-										onChange={handleVideoUpload}
+										onChange={uploadVideo}
 									/>
 								</Button>
 							</div>
-							<Button type="submit" variant="contained" className="bg-blue-500">
+							<Button
+								type="submit"
+								variant="contained"
+								className="bg-blue-500"
+								disabled={imageUploading || (VideoUrl === '' && AudioUrl === '')}>
 								Add Song
 							</Button>
 						</form>

@@ -74,6 +74,8 @@ const LoginForm = (props: {open: boolean; setOpen: Function}) => {
 					email,
 				});
 				const user = response.data;
+				localStorage.setItem("Name", user.username);
+				localStorage.setItem("Email", user.email);
 				console.log(user);
 			}
 		} catch (error) {
