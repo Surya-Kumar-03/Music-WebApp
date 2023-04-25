@@ -17,9 +17,10 @@ export interface InterfacegenreMusic {
 	music: InterfaceMusic[];
 }
 
+
 export interface InterfacePlayer {
-	muted: boolean;
-	seeking: boolean;
-	loop: boolean;
-	volume: number;
+	muted:boolean;
+	seeking:boolean;
+	loop:boolean,
+	volume: number,
 }
