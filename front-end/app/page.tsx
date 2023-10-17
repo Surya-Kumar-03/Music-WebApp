@@ -242,7 +242,7 @@ const Home = () => {
 	return (
 		<>
 			<div className="">
-				<div className="pb-20">
+				<div className="mb-10">
 					{DummyMusic.map((genre: InterfacegenreMusic, index: number) => {
 						return (
 							<>

@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 const songSchema = new mongoose.Schema({
-	id : {
+	id: {
 		type: Number,
 	},
 	name: {
